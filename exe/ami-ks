@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+vncpass = ARGV.shift
+abort "please specify vncpassword as first argument" if not vncpass
+ks_url = ARGV.shift
+abort "please specify kickstart url as second argument" if not ks_url
+
+require 'uri'
+if not ks_url =~ /\A#{URI::regexp(['http', 'https'])}\z/
+  abort "specified kickstart url is invalid"
+end
+require 'ami_kickstart/centos'
+ami = AMIKickstart::Centos.new(vncpass, ks_url)
+ami.kickstart
